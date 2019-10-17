@@ -234,8 +234,6 @@ class VoltageIn:
 
         low, high = _take_nearest_pair(self._calibration_keys, value)
 
-        print(low, high)
-
         normalized_offset = (value - low) / (high - low)
 
         low_volt = self._calibration[low]
