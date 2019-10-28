@@ -95,6 +95,7 @@ class VoltageOut:
     def __init__(self, analog_out):
         self._analog_out = analog_out
         self._calibration = {}
+        self._voltage = 0
 
     @classmethod
     def from_pin(cls, pin):
@@ -150,7 +151,10 @@ class VoltageOut:
 
         low, high = _take_nearest_pair(self._calibration_keys, voltage)
 
-        normalized_offset = (voltage - low) / (high - low)
+        if high == low:
+            normalized_offset = 0
+        else:
+            normalized_offset = (voltage - low) / (high - low)
 
         low_val = self._calibration[low]
         high_val = self._calibration[high]
@@ -159,11 +163,15 @@ class VoltageOut:
 
         return min(lerped, 65535)
 
+    def _get_voltage(self):
+        return self._voltage
+
     def _set_voltage(self, voltage):
+        self._voltage = voltage
         value = self._calibrated_value_for_voltage(voltage)
         self._analog_out.value = value
 
-    voltage = property(None, _set_voltage)
+    voltage = property(_get_voltage, _set_voltage)
 
 
 class VoltageIn:
@@ -234,7 +242,10 @@ class VoltageIn:
 
         low, high = _take_nearest_pair(self._calibration_keys, value)
 
-        normalized_offset = (value - low) / (high - low)
+        if high == low:
+            normalized_offset = 0
+        else:
+            normalized_offset = (value - low) / (high - low)
 
         low_volt = self._calibration[low]
         high_volt = self._calibration[high]

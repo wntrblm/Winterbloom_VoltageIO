@@ -62,6 +62,7 @@ class AnalogOut:
         (0.5, 32768),
         (0.75, 49151),
         (1.0, 65535),
+        (2.0, 65535),
     ]
 )
 def test_out_linear_calibration_normalized(voltage, value):
@@ -87,6 +88,7 @@ def test_out_linear_calibration_normalized(voltage, value):
         (2.475, 49151),
         # 100%
         (3.3, 65535),
+        (4.0, 65535),
     ]
 )
 def test_out_linear_calibration_real_range(voltage, value):
@@ -107,6 +109,7 @@ def test_out_linear_calibration_real_range(voltage, value):
         (1.0, 32768),
         (5.5, 49152),
         (10, 65535),
+        (11, 65535),
     ]
 )
 def test_out_direct_calibration(voltage, value):
