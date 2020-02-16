@@ -101,19 +101,19 @@ class VoltageOut:
     def from_pin(cls, pin):
         return cls(analogio.AnalogOut(pin))
 
-    def linear_calibration(self, max_voltage):
+    def linear_calibration(self, min_voltage, max_voltage):
         """Determines intermediate calibration values using the given
-        maximum output voltage (assumes the minimum is 0). This is the
+        a minimum and maximum output voltage. This is the
         simplest way to calibrate the output. It assumes that the DAC
         and any output scaling op amps have an exactly linear response.
 
         Example::
 
             # Output range is 0v to 10.26v.
-            vout.linear_calibration(10.26)
+            vout.linear_calibration(0.0, 10.26)
 
         """
-        self._calibration[0] = 0
+        self._calibration[min_voltage] = 0
         self._calibration[max_voltage] = 65535
 
         self._calibration_keys = sorted(self._calibration.keys())
@@ -197,16 +197,16 @@ class VoltageIn:
     def from_pin(cls, pin):
         return cls(analogio.AnalogIn(pin))
 
-    def linear_calibration(self, max_voltage):
+    def linear_calibration(self, min_voltage, max_voltage):
         """Determines intermediate calibration values using the given
-        maximum output voltage (assumes the minimum is 0). This is the
+        a minimum and maximum output voltage. This is the
         simplest way to calibrate the input. It assumes that the ADC
         and any output scaling op amps have an exactly linear response.
 
         Example::
 
             # Input range is 0v to 10.26v.
-            vin.linear_calibration(10.26)
+            vin.linear_calibration(0, 10.26)
 
         """
         self._calibration[0] = 0
